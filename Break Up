@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int n, a[307];
+int dp[307];
+
+int isPalin(int i, int j) { // is the sequence from i to j a palindrome - including both i and j
+    int length = j - i + 1;
+    for (int it = 0; it < length / 2; it++) {
+        if (a[i + it] != a[j - it])
+            return 0;
+    }
+    return 1;
+}
+
+int recur(int cur) {
+    if (dp[cur] != -1)
+        return dp[cur];
+    else {
+        int ans = INT_MAX;
+        for (int i = cur; i < n; i++) {
+            if (isPalin(cur, i))
+                ans = min(ans, recur(i + 1) + 1);
+        }
+        return dp[cur] = ans;
+    }
+}
+
+int main() {
+    memset(dp, -1, sizeof(dp));
+    scanf("%d", & n);
+    dp[n] = 0;
+    dp[n - 1] = 1;
+    for (int i = 0; i < n; i++)
+        scanf("%d", & a[i]);
+    printf("%d", recur(0));
+
+    return 0;
+}
