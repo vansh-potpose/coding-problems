@@ -1,0 +1,15 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int n; 
+    cin >> n;
+    vector<int> supw(n), dp(n);
+    for (int i = 0; i < n; i++){cin >> supw[i]; dp[i] = supw[i];}
+    
+    for (int i = n-4; i > -1; i--){
+        dp[i] += min(dp[i+1], min(dp[i+2], dp[i+3]) );
+    }
+
+    cout << min(dp[0], min(dp[1], dp[2]) );
+}
