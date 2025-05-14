@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+void solve() {
+    long long int n, K, ans = 0, tmp;
+    cin >> n;
+
+    long long int ar[n + 1][n + 1];
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 1; j <= i; j++)
+        {
+            cin >> ar[i][j];
+        }
+    }
+    long long int dp[n + 1][n + 1];
+    for (int j = 1; j <= n; j++)
+    {
+        dp[n][j] = ar[n][j];
+    }
+    for (int i = n - 1; i >= 0; i--)
+    {
+        for (int j = 1; j <= i; j++)
+        {
+            dp[i][j] = ar[i][j] + max(dp[i + 1][j], dp[i + 1][j + 1]);
+        }
+    }
+    cout << dp[1][1] << endl;
+}
+int main()
+{
+    long long int t = 1;
+    cin >> t;
+    for (int it = 1; it <= t; it++) {
+        solve();
+    }
+    return 0;
+}
