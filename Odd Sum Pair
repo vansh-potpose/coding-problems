@@ -1,0 +1,22 @@
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    int t; // Number of test cases
+    cin >> t;
+
+    while (t--) {
+        int a, b, c; // Variables to hold the three integers
+        cin >> a >> b >> c;
+
+        // Check the conditions and print results
+        if ((a + b) % 2 == 1 || (a + c) % 2 == 1 || (b + c) % 2 == 1) {
+            cout << "yes" << endl; // At least one pair sums to an odd number
+        } else {
+            cout << "no" << endl; // All pairs sum to even numbers
+        }
+    }
+
+    return 0;
+}
