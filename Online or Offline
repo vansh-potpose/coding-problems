@@ -1,0 +1,22 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int t;
+    cin >> t; // Read the number of test cases
+    while (t--) {
+        int n, m;
+        cin >> n >> m; // Read values for n and m
+        int x = 9 * n; // Calculate x
+        int y = 10 * m; // Calculate y
+        
+        if (x < y) {
+            cout << "ONLINE" << endl; // Output ONLINE if x is less than y
+        } else if (x > y) {
+            cout << "DINING" << endl; // Output DINING if x is greater than y
+        } else {
+            cout << "EITHER" << endl; // Output EITHER if x is equal to y
+        }
+    }
+    return 0; // Indicate that the program ended successfully
+}
