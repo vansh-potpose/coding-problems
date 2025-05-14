@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int t;
+    cin>>t;
+
+    while (t--){
+        int n;
+        cin>>n;
+    
+        vector<vector<int>> a(n,vector<int>(3));//s[i], e[i], c[i]
+        vector<int> dp(n);
+        for (int i = 0;i<n;i++)cin>>a[i][0]>>a[i][1]>>a[i][2];
+    
+        sort(a.begin(),a.end());
+        //sorted in increasing order of left endpoints
+
+        dp[0] = a[0][2];//c[0]
+        int ans = dp[0];//c[0]
+
+        for (int i = 1;i<n;i++){
+            dp[i] = a[i][2];//c[i]
+            for (int j = 0;j<i;j++)
+                if (a[j][1] <= a[i][0])//if e[j] <= s[i]
+                    dp[i] = max(dp[i],dp[j] + a[i][2]);//dp[j] + c[i]
+            ans = max(ans,dp[i]);
+        }
+        cout<<ans<<endl;
+    }
+    return 0;
+}
