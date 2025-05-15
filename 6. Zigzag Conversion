@@ -1,0 +1,32 @@
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        if(numRows==1 || numRows>=s.size()){
+            return s;
+        }
+        string aws="";
+        for(int i=0;i<numRows;i++){
+            int idx=i;
+            int southDeta=2*(numRows-1-i);
+            int northDeta=2*(i);
+            bool southWay=true;
+
+            while(idx<s.length()){
+                aws.push_back(s[idx]);
+                if(i==0){
+                    idx+=southDeta;
+                }else if(i==numRows-1){
+                    idx+=northDeta;
+                }else{
+                    if(southWay){
+                        idx+=southDeta;
+                    }else{
+                        idx+=northDeta;
+                    }
+                    southWay=!southWay;
+                }
+            }
+        }
+        return aws;
+    }
+};
