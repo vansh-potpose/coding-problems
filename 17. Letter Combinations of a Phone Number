@@ -1,0 +1,34 @@
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        vector<string> aws;
+        if(digits.size()<1){
+            return aws;
+        }
+        vector<vector<char>> v={
+             {'a', 'b', 'c'},
+            {'d', 'e', 'f'},
+            {'g', 'h', 'i'},
+            {'j', 'k', 'l'},
+            {'m', 'n', 'o'},
+            {'p', 'q', 'r','s'},
+            {'t', 'u','v'},
+            {'w', 'x','y', 'z'}
+        };
+
+        for (auto c : v[digits[0] - '0' - 2]) {
+            aws.push_back(std::string(1, c));
+        }
+
+        for(int i=1;i<digits.size();i++){
+            vector<string> temp;
+            for(auto &str:aws){
+                for(auto c:v[digits[i]-'0'-2]){
+                    temp.push_back(str+c);
+                }
+            }
+            aws.swap(temp);
+        }
+        return aws;
+    }
+};
