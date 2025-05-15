@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int maxSum(vector<int>& nums, int k, int m) {
+        int n=nums.size();
+
+        vector<int> prefix_bhai(n+1,0);
+        for(int i=0;i<n;i++){
+            prefix_bhai[i+1]=prefix_bhai[i]+nums[i];
+        }
+
+        vector<vector<long long>> dp(n+1,vector<long long>(k+1,INT_MIN));
+        for (int j = 0; j <= n; j++) {
+            dp[j][0] = 0;
+        }
+         for (int i = 1; i <= k; i++) {
+            long long best = INT_MIN;  
+            for (int j = 0; j <= n; j++) {
+                if (j > 0) {
+                    dp[j][i] = max(dp[j][i], dp[j - 1][i]);
+                }
+                if (j >= m) {
+                    best = max(best, dp[j - m][i - 1] - prefix_bhai[j - m]);
+                    dp[j][i] = max(dp[j][i], prefix_bhai[j] + best);
+                }
+            }
+        }
+        return dp[n][k];
+    }
+};
