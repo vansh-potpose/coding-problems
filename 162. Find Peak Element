@@ -1,0 +1,21 @@
+class Solution {
+public:
+// more optimized code with less if-else conditions
+    int findPeakElement(vector<int>& nums) {
+         int l = 0, r = nums.size() - 1;
+
+        while (l < r) {  
+            int mid =(r + l) / 2; 
+
+            // Compare mid with mid + 1
+            if (nums[mid] > nums[mid + 1]) {
+                // Move left if mid is greater than mid + 1
+                r = mid;
+            } else {
+                k// Move right if mid is less than mid + 1
+                l = mid + 1;
+            }
+        }
+        return l;  // At the end, l == r and points to a peak element
+    }
+};
