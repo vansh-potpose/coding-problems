@@ -1,0 +1,46 @@
+class Solution(object):
+    def exist(self, board, word):
+        """
+        :type board: List[List[str]]
+        :type word: str
+        :rtype: bool
+        """
+        def check(i, j, k):
+            if k == len(word):
+                return True
+            if 0 <= i < len(board) and 0 <= j < len(board[0]) and  board[i][j] == word[k]:
+                
+                temp= board[i][j]
+                board[i][j]="-" 
+
+                if (check(i + 1, j, k + 1) or
+                    check(i - 1, j, k + 1) or
+                    check(i, j + 1, k + 1) or
+                    check(i, j - 1, k + 1)):
+                    return True
+
+                board[i][j] = temp
+
+            return False
+
+        N = len(board)
+        M = len(board[0])
+        
+        if len(word) > N*M:
+            return False
+        
+        count = Counter(sum(board, []))
+        
+        for c, countWord in Counter(word).items():
+            if count[c] < countWord:
+                return False
+            
+        if count[word[0]] > count[word[-1]]:
+             word = word[::-1]
+             
+        for i in range(N):
+            for j in range(M):
+                if board[i][j] == word[0] and check(i, j, 0):
+                    return True
+
+        return False
