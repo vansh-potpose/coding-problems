@@ -1,0 +1,41 @@
+class Solution {
+public:
+    vector<int> baseUnitConversions(vector<vector<int>>& conversions) {
+        const int mod=1e9+7;
+        int n=conversions.size()+1;
+        vector<vector<pair<int,long long>>> graph(n);
+
+        for(auto& conv :  conversions){
+            int u=conv[0],v=conv[1];
+            long long factor=conv[2];
+            graph[u].push_back({v,factor});
+            graph[v].push_back({u,factor});
+        }
+
+        vector<long long> baseC(n,-1);
+        baseC[0]=1;
+        queue<int> q;
+        q.push(0);
+        while(!q.empty()){
+            int unit = q.front();
+            q.pop();
+
+            for(auto& n:graph[unit]){
+                int neighborUnit = n.first;
+                int factor = n.second;
+
+                if(baseC[neighborUnit]==-1){
+                    baseC[neighborUnit]=((baseC[unit]*factor)%mod);
+                    q.push(neighborUnit);
+                }
+            }
+        }
+        vector<int> result(n);
+        for (int i = 0; i < n; ++i) {
+            result[i] = static_cast<int>(baseC[i]);
+        }
+
+        return result;
+        
+    }
+};
