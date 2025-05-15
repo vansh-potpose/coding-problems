@@ -1,0 +1,30 @@
+class Solution {
+public:
+    long long minOperations(vector<vector<int>>& queries) {
+
+        long long total_opr=0;
+        for(auto &query : queries){
+            int l=query[0],r=query[1];
+            long long total_step=0;
+            long long round=1;
+            int k=0;
+
+            while(round<=r){
+
+                long long s=max((long long)l,round);
+                long long e=min((long long)r,round*4-1);
+                if(s<=e){
+                    long long count=e+1-s;
+                    total_step+=(long long)(k+1)*count;
+                }
+                round*=4;
+                k++;
+            }
+
+            long long opers=(total_step+1)/2;
+            total_opr+=opers;
+            
+        }
+        return total_opr;
+    }
+};
