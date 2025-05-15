@@ -1,0 +1,20 @@
+class Solution(object):
+    def wordPattern(self, pattern, s):
+        """
+        :type pattern: str
+        :type s: str
+        :rtype: bool
+        """
+        s=s.split()
+        dict1={}
+        if(len(set(s))!=len(set([i for i in pattern])) or len(s)!=len(pattern)):
+            return False
+        for i in range(len(pattern)):
+            if(pattern[i] not in dict1):
+                dict1[pattern[i]]=s[i]
+            elif(dict1[pattern[i]]!=s[i]):
+                return False
+        return True
+
+
+        
