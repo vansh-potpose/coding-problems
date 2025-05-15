@@ -1,0 +1,35 @@
+class Solution {
+public:
+int daysToShip(vector<int>& weights, int capacity) {
+        long long temp = 0; 
+        int days = 1; 
+        
+        for (int weight : weights) {
+            if (temp + weight > capacity) {
+                days++; 
+                temp = weight; 
+            } else {
+                temp += weight; 
+            }
+        }
+        
+        return days;
+    }
+    
+    int shipWithinDays(vector<int>& weights, int days) {
+        int lo = *max_element(weights.begin(), weights.end());
+        int hi = accumulate(weights.begin(), weights.end(), 0);
+        int mid;
+        
+        while (lo <= hi) {
+            mid = lo + (hi - lo) / 2; 
+            if (daysToShip(weights, mid) > days) {
+                lo = mid + 1; 
+            } else {
+                hi = mid-1;
+            }
+        }
+        
+        return lo; 
+    }
+};
