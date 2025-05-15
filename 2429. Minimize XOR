@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int minimizeXor(int num1, int num2) {
+        const int sz = 30;
+        int s=0;
+        string aws="";
+        bitset<sz> n1(num1);
+        bitset<sz> n2(num2);
+        int sum=0;
+        for(int i=0;i<n2.size();i++){
+           sum+=n2[i];
+        }
+        for(int i=n1.size()-1;i>=0;i--){
+           
+            if(n1[i]==1 && sum>0){
+                aws="1"+aws;
+                sum--;
+            }else{
+                aws="0"+aws;
+            }
+        }
+        int j=0;
+        while(sum>0 && j<aws.length()){
+            if(aws.at(j)=='0'){
+                aws[j]='1';
+                sum--;
+            }
+                j++;
+        }
+        while(sum>0){
+            aws="1"+aws;
+            sum--;
+        }
+
+        reverse(aws.begin(), aws.end()); 
+        bitset<sz> a(aws);  
+        int b=a.to_ulong();  
+        return b;
+
+    }
+};
