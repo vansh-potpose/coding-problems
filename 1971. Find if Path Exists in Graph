@@ -1,0 +1,36 @@
+class Solution {
+public:
+    bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
+        if (source == destination) return true;
+
+        vector<set<int>> sets; 
+
+        for (auto& edge : edges) {
+            int u = edge[0], v = edge[1];
+            int setU = -1, setV = -1;
+
+            for (int i = 0; i < sets.size(); i++) {
+                if (sets[i].count(u)) setU = i;
+                if (sets[i].count(v)) setV = i;
+            }
+
+            if (setU == -1 && setV == -1) {
+                sets.push_back({u, v});
+            } else if (setU != -1 && setV == -1) {
+                sets[setU].insert(v);
+            } else if (setU == -1 && setV != -1) {
+                sets[setV].insert(u);
+            } else if (setU != setV) {
+                sets[setU].insert(sets[setV].begin(), sets[setV].end());
+                sets.erase(sets.begin() + setV);
+            }
+        }
+
+        // Check if source and destination exist in the same set
+        for (auto& s : sets) {
+            if (s.count(source) && s.count(destination)) return true;
+        }
+
+        return false;
+    }
+};
