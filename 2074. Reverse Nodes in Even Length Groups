@@ -1,0 +1,74 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+
+    ListNode* reverseList(ListNode* start, ListNode* end) {
+        ListNode* prev = nullptr;
+        ListNode* current = start;
+        ListNode* next = nullptr;
+        while (current != end) {
+            next = current->next;
+            current->next = prev;
+            prev = current;
+            current = next;
+        }
+        next=prev;
+        while(next!=NULL){
+            cout<<next->val<<"-->";
+            next=next->next;
+        }
+        cout<<"NULL"<<endl;
+        return prev; 
+
+    }
+
+    ListNode* reverseEvenLengthGroups(ListNode* head) {
+        if (head == nullptr || head->next == nullptr) {
+            return head;
+        }
+
+        ListNode* prev = nullptr; 
+        ListNode* current = head; 
+        int groupSize = 1; 
+
+        while (current != nullptr) {
+
+            ListNode* groupStart = current;
+            int count = 0;
+            while (current != nullptr && count < groupSize) {
+                current = current->next;
+                count++;
+            }
+
+            if (count % 2 == 0) {
+                ListNode* groupEnd = current; 
+                ListNode* newGroupStart = reverseList(groupStart, groupEnd);
+                
+                if (prev != nullptr) {
+                    prev->next = newGroupStart;
+                }
+
+                groupStart->next = groupEnd;
+                prev = groupStart;
+            } else {
+                prev = groupStart;
+                for (int i = 1; i < count; i++) {
+                    prev = prev->next;
+                }
+            }
+
+            groupSize++;
+        }
+
+        return head;
+    }
+};
