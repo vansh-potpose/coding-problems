@@ -1,0 +1,17 @@
+class Solution {
+public:
+    
+    int totalHammingDistance(vector<int>& nums) {
+        int total = 0, n = nums.size();
+        
+        for (int bit = 0; bit < 32; bit++) {
+            int count_1s=0;
+            for(int num:nums){
+                count_1s+=(num>>bit)&1;
+            }
+            int count_0s=n-count_1s;
+            total+=count_0s*count_1s;
+        }
+        return total;
+    }
+};
