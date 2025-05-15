@@ -1,0 +1,70 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* merge(ListNode* l1 , ListNode* l2){
+        ListNode* head;
+
+        if(l2==NULL){
+            return l1;
+        }
+        if(l1==NULL){
+            return l2;
+        }
+        if(l1->val<l2->val){
+            head=l1;
+            l1=l1->next;
+        }else{
+            head=l2;
+            l2=l2->next;
+        }
+        ListNode* temp=head;
+        while(true){
+            if(l1==NULL){
+                temp->next=l2;
+                break;
+            }else if(l2==NULL){
+                temp->next=l1;
+                break;
+            }
+                if(l1->val<l2->val){
+                    temp->next=l1;
+                    l1=l1->next;
+                }else{
+                    temp->next=l2;
+                    l2=l2->next;
+                }
+            temp=temp->next;
+
+        }
+        return head;
+    }
+
+    vector<ListNode*> mergeSort(vector<ListNode*>& lists){
+        if(lists.size()==1)return lists;
+        vector<ListNode*> out;
+        for(int i=0;i<lists.size();i+=2){
+            if(i+1<lists.size()){
+                out.push_back(merge(lists[i],lists[i+1]));
+            }else{
+                out.push_back(lists[i]);
+            }
+        }
+        return mergeSort(out);
+    }
+
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        if(lists.size()==0){
+            return NULL;
+        }
+        return mergeSort(lists)[0];
+    }
+};
