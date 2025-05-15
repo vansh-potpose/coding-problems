@@ -1,0 +1,15 @@
+class Solution(object):
+    def isHappy(self, n):
+        """
+        :type n: int
+        :rtype: bool
+        """
+        while(n!=1):
+            ans=0
+            for i in str(n):
+                ans+=int(i)**2
+            n=ans
+            if(n in [0,2,3,4,5,6,8,9]):
+                return False
+        return True
+        
