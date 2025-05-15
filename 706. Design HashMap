@@ -1,0 +1,58 @@
+
+class MyHashMap {
+
+private:
+    static const int SIZE = 10007; 
+    vector<pair<int, int>> buckets[SIZE];
+
+    int hash(int key) {
+        return key % SIZE;
+    }
+
+public:
+
+    MyHashMap() {
+        
+    }
+    
+    void put(int key, int value) {
+        int index = hash(key);
+        for (auto& [k, v] : buckets[index]) {
+            if (k == key) {
+                v = value; 
+                return;
+            }
+        }
+        buckets[index].emplace_back(key, value);
+    }
+    
+    int get(int key) {
+        int index = hash(key);
+        for (const auto& [k, v] : buckets[index]) {
+            if (k == key) {
+                return v;
+            }
+        }
+        return -1;
+    }
+    
+    void remove(int key) {
+        int index = hash(key);
+        auto& bucket = buckets[index];
+        for (auto it = bucket.begin(); it != bucket.end(); ++it) {
+            if (it->first == key) {
+                bucket.erase(it); 
+                return;
+            }
+        }
+    }
+
+};
+
+/**
+ * Your MyHashMap object will be instantiated and called as such:
+ * MyHashMap* obj = new MyHashMap();
+ * obj->put(key,value);
+ * int param_2 = obj->get(key);
+ * obj->remove(key);
+ */
