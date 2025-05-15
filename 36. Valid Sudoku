@@ -1,0 +1,32 @@
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        int i,j,block_code,ch;
+        vector<vector<int>> row(9,vector<int>(10,0));
+        vector<vector<int>> col(9,vector<int>(10,0));
+        vector<vector<int>> block(9,vector<int>(10,0));
+
+        for(i=0;i<9;i++){
+            for(j=0;j<9;j++){
+                if(board[i][j] != '.'){
+                    int ch = board[i][j]-'0';
+                    if(row[i][ch] == 1)
+                        return false;
+                    else
+                        row[i][ch] = 1;
+                    
+                    if(col[j][ch] == 1)
+                        return false;
+                    else
+                        col[j][ch] = 1;
+                    
+                    block_code = (i/3)*3 + j/3;
+                    if(block[block_code][ch] == 1)
+                        return false;
+                    block[block_code][ch] = 1;
+                }
+            }
+        }
+        return true;
+    }
+};
