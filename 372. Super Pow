@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int binaryExponentiation(int x, int n, int mod){
+        x=x%mod;
+        int result=1;
+        while(n>0){
+            if(n&1){
+                result=(result*1LL*x)%mod;
+            }
+            x=(x*1LL*x)%mod;
+            n=n>>1;
+        }
+        return result;
+    }
+    int superPow(int a, vector<int>& b) {
+        if(a==1) return 1;
+        int bmod=0;
+        for(int val:b){
+            bmod=(bmod*10+val)%1140;
+        }
+        if (bmod == 0) bmod = 1140;
+        return binaryExponentiation(a,bmod,1337);
+    }
+};
