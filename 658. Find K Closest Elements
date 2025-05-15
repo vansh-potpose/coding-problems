@@ -1,0 +1,35 @@
+class Solution {
+public:
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        int l = 0, r = arr.size() - 1;
+        vector<int> v;
+
+        while (l < r) {
+            int mid = (l + r) / 2;
+            if (arr[mid] < x) {
+                l = mid + 1;
+            } else {
+                r = mid;
+            }
+        }
+
+        l = r - 1;
+        r = r;
+
+        // Expand pointers to find the k closest elements
+        while (r - l - 1 < k) {
+            if (l < 0) {
+                r++;
+            } else if (r >= arr.size()) {
+                l--;
+            } else if (x - arr[l] <= arr[r] - x) {
+                l--;
+            } else {
+                r++;
+            }
+        }
+
+        copy(arr.begin() + l + 1, arr.begin() + r, back_inserter(v));
+        return v;
+    }
+};
