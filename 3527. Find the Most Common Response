@@ -1,0 +1,21 @@
+class Solution {
+public:
+    string findCommonResponse(vector<vector<string>>& responses) {
+        unordered_map<string,int> m;
+        for(auto& i : responses){
+            unordered_set<string> s(i.begin(),i.end());
+            for(const auto& j : s){
+                m[j]++;
+            }
+        }
+        string result;
+        int maxc=0;
+        for( const auto& e:m){
+            if(e.second>maxc || (e.second == maxc && e.first<result)){
+                result=e.first;
+                maxc=e.second;
+            }
+        }
+        return result;
+    }
+};
