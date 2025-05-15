@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        vector<int> mp(26,0);
+        for(char & c: tasks){
+            mp[c-'A']++;
+        }
+        sort(mp.begin(),mp.end(),greater<int>());
+        int mx = mp[0];
+        int gaps = mx - 1 ;
+        int ideals = gaps*n;
+        for(int i = 1 ; i< mp.size() ; i++){
+            ideals -= min(gaps,mp[i]);
+        }
+        int time = tasks.size() + max(0,ideals);
+        return time;
+    }
+};
