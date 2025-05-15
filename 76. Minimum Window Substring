@@ -1,0 +1,34 @@
+/*
+*if [l, r] contains all characters in t, move both l and r because move r alone would result in a larger window
+*if [l, r] doesn't contains all characters, but there is a character c exceeds its count of appearance in t, move l until the previous c
+*/
+
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        vector<int> map(128, 0);
+        for (auto c : t) {
+            map[c]++;
+        }
+        int count = t.length(), l = 0, r = 0, len = INT_MAX, head = 0;
+        while(r<s.length()) {
+            if(map[s[r]] > 0) {
+                count--;
+            }
+            map[s[r]]--;
+            r++;
+            while(count == 0) {
+                if(r-l < len) {
+                    len = r-l;
+                    head = l;
+                }
+                map[s[l]]++;
+                if(map[s[l]] > 0) {
+                    count++;
+                }
+                l++;
+            }
+        }
+        return len == INT_MAX ? "" : s.substr(head, len);
+    }
+};
