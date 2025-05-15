@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int ones=0,twice=0;
+        for(int num : nums){
+            ones=(ones^num) & ~twice;
+            cout<<ones;
+            twice=(twice^num)& ~ones;
+            cout<<twice<<endl;
+        }
+        return ones;
+    }
+};
