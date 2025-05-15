@@ -1,0 +1,31 @@
+class Solution {
+public:
+    ListNode* insertionSortList(ListNode* head) {
+        if (!head || !head->next) return head;
+
+        ListNode dummy(0); 
+        dummy.next = head; 
+
+        ListNode* sortedEnd = head; 
+        ListNode* current = head->next; 
+
+        while (current) {
+            if (current->val >= sortedEnd->val) {
+                sortedEnd = current;
+            } else {
+                // Find the correct position for the current node in the sorted part
+                ListNode* prev = &dummy;
+                while (prev->next->val < current->val) {
+                    prev = prev->next;
+                }
+
+                sortedEnd->next = current->next;
+                current->next = prev->next;
+                prev->next = current;
+            }
+            current = sortedEnd->next;
+        }
+
+        return dummy.next;
+    }
+};
