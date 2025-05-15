@@ -1,0 +1,25 @@
+class Solution {
+public:
+
+vector<vector<int>> s;
+void generate(vector<int> &subset,vector<int> &nums,int ind){
+
+    s.push_back(subset);
+
+    for(int i=ind;i<nums.size();i++){
+        if(i != ind && nums[i] == nums[i-1]) continue;
+
+            subset.push_back(nums[i]);
+            generate(subset,nums, i+1 );
+            subset.pop_back();
+    }
+    
+}
+  
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        vector<int>subset;
+        generate(subset,nums,0);
+        return s;
+    }
+};
