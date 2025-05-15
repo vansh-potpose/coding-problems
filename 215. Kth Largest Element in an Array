@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        return quickSelect(nums,0,nums.size()-1,k-1);
+    }
+    int quickSelect(vector<int>& nums,int start,int end,int k){
+        int p = start + (rand() % (end + 1 - start)); 
+        int pivot=nums[p];
+        swap(nums[start],nums[p]);
+        int l=start+1;
+        int r=end;
+        while(l<=r){
+            if(nums[l]>pivot){
+                l++;
+            }else if(nums[r]<pivot){
+                r--;
+            }else{
+                swap(nums[l++],nums[r--]);
+            }
+        }
+        swap(nums[start],nums[r]);
+
+        if(k==r){
+            return nums[r];
+        }else if(k<r){
+            return quickSelect(nums,start,r-1,k);
+        }else{
+            return quickSelect(nums,r+1,end,k);
+        }
+    }
+};
