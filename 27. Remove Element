@@ -1,0 +1,5 @@
+class Solution(object):
+    def removeElement(self, nums, val):
+        while(len(nums)!=(len(nums)-nums.count(val))):
+            nums.remove(val)
+        
