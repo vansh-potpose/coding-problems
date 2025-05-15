@@ -1,0 +1,11 @@
+class Solution(object):
+    def titleToNumber(self, columnTitle):
+        """
+        :type columnTitle: str
+        :rtype: int
+        """
+        r=0
+        columnTitle=columnTitle[::-1]
+        for i,j in enumerate(columnTitle):
+            r=r+(ord(j)-64)*(26**(i))
+        return r
