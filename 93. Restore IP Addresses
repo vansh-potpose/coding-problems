@@ -1,0 +1,40 @@
+class Solution {
+public:
+    bool checkIP(string s){
+        stringstream ss;
+        int nums;
+        if(s.size()>1 && s[0]=='0'){
+            return false;
+        }
+        ss<<s;
+        ss>>nums;
+        if(nums>=0 && nums<=255){
+            return true;
+        }
+        return false;
+    }
+    vector<string> restoreIpAddresses(string s) {
+        vector<string> result;
+        if(s.size()>12 || s.size()<4){
+            return {};
+        }
+        for(int i=1;i<4;i++){
+             for (int j = 1; i + j < s.size() && j < 4; ++j) {
+                for (int k = 1; i + j + k < s.size() && k < 4; ++k) {
+                    int l = s.size() - (i + j + k);
+                    if (l < 1 || l > 3) continue;
+                    
+                    string s1 = s.substr(0, i);
+                    string s2 = s.substr(i, j);
+                    string s3 = s.substr(i + j, k);
+                    string s4 = s.substr(i + j + k, l);
+                     if (checkIP(s1) && checkIP(s2) && checkIP(s3) && checkIP(s4)) {
+                        result.push_back(s1 + "." + s2 + "." + s3 + "." + s4);
+                    }
+                }
+             }
+        }
+        return result;
+        
+    }
+};
