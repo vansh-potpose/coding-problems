@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int findMaximumXOR(vector<int>& nums) {
+        int maxXor = 0, mask = 0;
+        for (int i = 31; i >= 0; i--) {
+            mask |= (1 << i); // Keep more significant bits
+            unordered_set<int> prefixes;
+            for (int num : nums) {
+                prefixes.insert(num & mask);
+            }
+
+            int candidate = maxXor | (1 << i); // Assume we can set this bit
+            for (int prefix : prefixes) {
+                if (prefixes.count(prefix ^ candidate)) { // If a pair exists
+                    maxXor = candidate; // Update max XOR
+                    break;
+                }
+            }
+        }
+        return maxXor;
+    }
+};
