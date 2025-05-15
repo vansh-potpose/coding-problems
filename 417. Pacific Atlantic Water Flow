@@ -1,0 +1,46 @@
+class Solution {
+public:
+    vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
+        int rows = heights.size(), cols = heights[0].size();
+        vector<vector<bool>> pacific(rows, vector<bool>(cols, false));
+        vector<vector<bool>> atlantic(rows, vector<bool>(cols, false));
+        vector<vector<int>> result;
+        queue<pair<int, int>> pac, atl;
+
+        for (int i = 0; i < rows; i++) {
+            pac.push({i, 0});        
+            atl.push({i, cols - 1}); 
+        }
+        for (int j = 0; j < cols; j++) {
+            pac.push({0, j});        
+            atl.push({rows - 1, j}); 
+        }
+
+        auto bfs = [&](queue<pair<int, int>>& q, vector<vector<bool>>& ocean) {
+            vector<int> dir = {-1, 0, 1, 0, -1};
+            while (!q.empty()) {
+                auto [r, c] = q.front();
+                q.pop();
+                ocean[r][c] = true;
+                for (int i = 0; i < 4; i++) {
+                    int nr = r + dir[i], nc = c + dir[i + 1];
+                    if (nr >= 0 && nc >= 0 && nr < rows && nc < cols && !ocean[nr][nc] &&
+                        heights[nr][nc] >= heights[r][c]) {
+                        q.push({nr, nc});
+                    }
+                }
+            }
+        };
+        bfs(pac, pacific);
+        bfs(atl, atlantic);
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (pacific[i][j] && atlantic[i][j]) {
+                    result.push_back({i, j});
+                }
+            }
+        }
+        return result;
+    }
+};
