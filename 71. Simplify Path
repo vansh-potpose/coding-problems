@@ -1,0 +1,37 @@
+class Solution {
+public:
+    vector<string> adv_tokenizer(string s, char del){
+        vector<string> result;
+        stringstream ss(s);
+        string word;
+        while (!ss.eof()) {
+            getline(ss, word, del);
+            if(word!="" && word!="."){
+                if(word==".."){
+                    if(result.size()>0){
+                        result.pop_back();
+                    }
+                }else{
+
+                result.push_back(word);
+                }
+
+            } 
+        }
+        return result;
+    }
+    string simplifyPath(string path) {
+        int i=0;
+        string aws="";
+        vector<string> result=adv_tokenizer(path,'/');
+        
+
+        for(string s: result){
+            aws+='/'+s;
+        }
+        if(aws.size()==0)
+            return "/";
+        return aws;
+        
+    }
+};
