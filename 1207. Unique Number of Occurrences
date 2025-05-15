@@ -1,0 +1,11 @@
+class Solution(object):
+    def uniqueOccurrences(self, arr):
+        """
+        :type arr: List[int]
+        :rtype: bool
+        """
+        s=set(arr)
+        count=[arr.count(i) for i in s]
+        return len(count)==len(set(count))
+        
+        
