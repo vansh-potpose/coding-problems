@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int minPathSum(vector<vector<int>>& grid) {
+        vector<vector<int>> minsum(grid.size()+1,vector<int> (grid[0].size()+1,INT_MAX));
+        for(int i=1;i<minsum.size();i++){
+            for(int j=1;j<minsum[0].size();j++){
+                if(i==1 && j==1){
+                    minsum[i][j]=grid[i-1][j-1];
+                    continue;
+                }
+                minsum[i][j]=min(minsum[i-1][j],minsum[i][j-1])+grid[i-1][j-1];
+            }
+        }
+
+        
+        return minsum[grid.size()][grid[0].size()];
+    }
+};
