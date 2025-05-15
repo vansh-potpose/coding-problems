@@ -1,0 +1,56 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        int check=0;
+        ListNode *h=new ListNode(0);
+        ListNode *t=h;
+        while(l1!=NULL && l2!=NULL){
+            if(l1->val+l2->val+check>9){
+                
+                ListNode *a=new ListNode((l1->val+l2->val+check)%10);
+                check=(l1->val+l2->val+check)/10;
+                t->next=a;
+            }else{
+                ListNode *a=new ListNode(l1->val+l2->val+check);
+                check=(l1->val+l2->val+check)/10;
+                t->next=a;
+            }
+            
+            t=t->next;
+            l1=l1->next;
+            l2=l2->next;
+        }
+
+        while(l1!=NULL){
+            ListNode *a=new ListNode((l1->val+check)%10);
+            check=(l1->val+check)/10;
+            t->next=a;
+            t=t->next;
+            l1=l1->next;
+        }
+        while(l2!=NULL){
+            ListNode *a=new ListNode((l2->val+check)%10);
+            check=(l2->val+check)/10;
+            t->next=a;
+            t=t->next;
+            l2=l2->next;
+        }
+        while(check!=0){
+             ListNode *a=new ListNode((check)%10);
+            check=(check)/10;
+            t->next=a;
+            t=t->next;
+        }
+        return h->next;
+    }
+};
