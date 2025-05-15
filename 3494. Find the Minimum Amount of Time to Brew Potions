@@ -1,0 +1,37 @@
+class Solution {
+public:
+    long long minTime(vector<int>& skill, vector<int>& mana) {
+        auto kk=make_pair(skill,mana);
+        int n=kk.first.size();
+        int m=kk.second.size();
+
+        vector<long long> prefix(n);
+        prefix[0]=kk.first[0];
+        for(int i=1;i<n;i++){
+            prefix[i]=prefix[i-1]+kk.first[i];
+        }
+
+        vector<long long >prev(n);
+        for(int i=0;i<n;i++){
+            prev[i]=prefix[i]*(long long)kk.second[0];
+        }
+
+        long long start_T=0;
+
+        for(int j=1;j<m;j++){
+            vector<long long> c(n);
+            for(int i=0;i<n;i++){
+                c[i]=prefix[i]*(long long)kk.second[j];
+                
+            }
+            long long d=prev[0];
+            for(int i=1;i<n;i++){
+                d=max(d,prev[i]-c[i-1]);
+                
+            }
+            start_T+=d;
+            prev=move(c);
+        }
+        return prev[n-1]+start_T;
+    }
+};
