@@ -1,0 +1,15 @@
+class NumStrMinComparator {
+public:
+    bool operator() (string &b, string &a) { 
+        if (a.size() != b.size()) return a.size() < b.size();
+        return  a < b;
+    }
+};
+
+class Solution {
+public:
+    string kthLargestNumber(vector<string>& nums, int k) {
+        nth_element(begin(nums), begin(nums)+k-1, end(nums), NumStrMinComparator());
+        return nums[k-1];
+    }
+};
