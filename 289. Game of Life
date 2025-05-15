@@ -1,0 +1,33 @@
+class Solution {
+public:
+ vector<pair<int, int>> dir = {{-1, 0}, {0, -1}, {0, 1}, {1, 0},{-1, -1}, {1, 1}, {-1, 1}, {1, -1}};    
+ int check(int i, int j, int r, int c, vector<vector<int>>& board) {
+        int count = 0;
+        for (auto d : dir) {
+            int ni = i + d.first;
+            int nj = j + d.second;
+            if (ni >= 0 && ni < r && nj >= 0 && nj < c) {
+                count += board[ni][nj]; 
+            }
+        }
+        return count;
+    }
+    void gameOfLife(vector<vector<int>>& board) {
+        int r=board.size(),c=board[0].size();
+        vector<vector<int>> board2=board;
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                 int count = check(i, j, r, c, board2);
+                if (board[i][j] == 1) {
+                    if (count < 2 || count > 3) {
+                        board[i][j] = 0;
+                    }
+                } else { 
+                    if (count == 3) {
+                        board[i][j] = 1; 
+                    }
+                }
+            }
+        }
+    }
+};
