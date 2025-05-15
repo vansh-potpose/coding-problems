@@ -1,0 +1,64 @@
+class Router {
+private:
+    int memoryLimit;
+
+    struct Packet {
+        int source, destination, timestamp;
+    };
+
+    queue<Packet> fifo;
+    unordered_set<string> seen;
+
+    unordered_map<int, vector<int>> destinationTimestamps;
+
+    string generateKey(int s, int d, int t) {
+        return to_string(s) + "#" + to_string(d) + "#" + to_string(t);
+    }
+
+public:
+    Router(int memoryLimit) : memoryLimit(memoryLimit) {}
+
+    bool addPacket(int source, int destination, int timestamp) {
+        string key = generateKey(source, destination, timestamp);
+        if (seen.count(key)) return false;
+
+        if (fifo.size() == memoryLimit) {
+            Packet old = fifo.front(); fifo.pop();
+            string oldKey = generateKey(old.source, old.destination, old.timestamp);
+            seen.erase(oldKey);
+
+            auto& vec = destinationTimestamps[old.destination];
+            auto it = lower_bound(vec.begin(), vec.end(), old.timestamp);
+            if (it != vec.end() && *it == old.timestamp) {
+                vec.erase(it);
+            }
+        }
+
+        fifo.push({source, destination, timestamp});
+        seen.insert(key);
+        destinationTimestamps[destination].push_back(timestamp);
+        return true;
+    }
+
+    vector<int> forwardPacket() {
+        if (fifo.empty()) return {};
+        Packet pkt = fifo.front(); fifo.pop();
+        string key = generateKey(pkt.source, pkt.destination, pkt.timestamp);
+        seen.erase(key);
+
+        auto& vec = destinationTimestamps[pkt.destination];
+        auto it = lower_bound(vec.begin(), vec.end(), pkt.timestamp);
+        if (it != vec.end() && *it == pkt.timestamp) {
+            vec.erase(it);
+        }
+
+        return {pkt.source, pkt.destination, pkt.timestamp};
+    }
+
+    int getCount(int destination, int startTime, int endTime) {
+        auto& vec = destinationTimestamps[destination];
+        auto low = lower_bound(vec.begin(), vec.end(), startTime);
+        auto high = upper_bound(vec.begin(), vec.end(), endTime);
+        return distance(low, high);
+    }
+};
