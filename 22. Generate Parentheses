@@ -1,0 +1,25 @@
+class Solution {
+public:
+
+vector<string> valid;
+void generatepara(string &s,int ob,int cb){
+    if(!(ob || cb)){
+        valid.push_back(s);
+    }
+    if(ob>0){
+        s.push_back('(');
+        generatepara(s,ob-1,cb);
+        s.pop_back();
+    }
+    if(cb>0 && cb>ob){
+        s.push_back(')');
+        generatepara(s,ob,cb-1);
+        s.pop_back();
+    }
+}
+    vector<string> generateParenthesis(int n) {
+        string s="";
+        generatepara(s,n,n);
+        return valid;
+    }
+};
