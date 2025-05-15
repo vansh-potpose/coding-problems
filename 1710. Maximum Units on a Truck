@@ -1,0 +1,27 @@
+class Solution(object):
+    def maximumUnits(self, boxTypes, truckSize):
+        """
+        :type boxTypes: List[List[int]]
+        :type truckSize: int
+        :rtype: int
+        """
+        
+        weight=0
+        i=0
+        profit=0
+        
+
+        boxTypes.sort(key= lambda x : x[1],reverse=True)
+        
+        while(weight<truckSize and not(i==len(boxTypes))):
+            if(weight+boxTypes[i][0]<=truckSize):
+                profit+=(boxTypes[i][1])*boxTypes[i][0]
+                weight+=boxTypes[i][0]
+               
+            else:
+                profit+=(boxTypes[i][1])*((truckSize-weight))
+                weight=truckSize
+            i=i+1
+            
+        return profit
+  
