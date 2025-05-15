@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int minimumDifference(vector<int>& nums, int k) {
+        if(k==1){
+        return 0;
+    }
+    sort(nums.begin(),nums.end());
+    int mini=INT_MAX;
+    for(int i=0;(i+k)<=nums.size();i++){
+        if((nums[i+k-1]-nums[i])<mini){
+            mini=(nums[i+k-1]-nums[i]);
+        }
+    }
+    return mini;
+    }
+};
