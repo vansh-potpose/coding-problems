@@ -1,0 +1,24 @@
+class Solution(object):
+    def intersect(self, nums1, nums2):
+        """
+        :type nums1: List[int]
+        :type nums2: List[int]
+        :rtype: List[int]
+        """
+        k=[]
+        l=list(set(nums1).intersection(set(nums2)))
+        for i in l:
+            if(nums1.count(i)<nums2.count(i)):
+                for j in range(nums1.count(i)):
+                    k.append(i)
+            else:
+                for j in range(nums2.count(i)):
+                    k.append(i)
+         
+        return k
+                
+
+
+
+
+        
