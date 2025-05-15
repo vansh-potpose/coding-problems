@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        vector<vector<int>> box(m,vector<int>(n,1));
+
+        for (int i = 1; i < m; ++i) {
+            for (int j = 1; j < n; ++j) {
+                box[i][j] = box[i - 1][j] + box[i][j - 1]; // Top + Left
+            }
+        }
+
+        
+        return box[m-1][n-1];
+    }
+};
