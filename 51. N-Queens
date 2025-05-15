@@ -1,0 +1,38 @@
+class Solution {
+public:
+    bool isSafe(int row,int col,vector<string> &board,int n){
+        for (int i = row - 1, left = col - 1, right = col + 1; i >= 0; --i, --left, ++right) {
+            if (board[i][col] == 'Q' || (left >= 0 && board[i][left] == 'Q') || 
+            (right < n && board[i][right] == 'Q')) {
+        return false;
+    }
+}
+
+        return true;
+    }
+
+    void placeQueen(int row,vector<string> &board,vector<vector<string>> &ans,int n){
+        if(row==n){
+            ans.push_back(board);
+            return;
+        }
+        for(int col=0;col<n;col++){
+            if(isSafe(row,col,board,n)){
+                board[row][col]='Q';
+                placeQueen(row+1,board,ans,n);
+                board[row][col]='.';
+            }
+        }
+    }
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> ans;
+        vector<string> board;
+        string s(n,'.');
+        for(int i=0;i<n;i++){
+            board.push_back(s);
+        }
+
+        placeQueen(0,board,ans,n);
+        return ans;
+    }
+};
