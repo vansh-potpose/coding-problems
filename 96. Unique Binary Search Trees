@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int combinations(int n,vector<int>& dp){
+        if(n<=1){
+            return 1;
+        }
+       
+        if(dp[n]!=-1){
+            return dp[n];
+        }
+        int ans=0;
+        for(int i=1;i<=n;i++){
+            ans+=combinations(i-1,dp)*combinations(n-i,dp);
+        }
+        return dp[n]=ans;
+    }
+    int numTrees(int n) {
+        vector<int> dp(n+1,-1);
+        return combinations(n,dp);
+        
+    }
+};
