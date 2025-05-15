@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int price(char p1, char p2) {
+        return min(abs(p1 - p2), 26 - abs(p1 - p2));
+    }
+
+    int longestPalindromicSubsequence(string s, int k) {
+        int n = s.size();
+        vector dp(n, vector(n, vector(k + 1, 0))); 
+
+        for (int i = 0; i < n; i++) fill(dp[i][i].begin(), dp[i][i].end(), 1);
+
+        for (int sz = 2; sz <= n; sz++)  
+            for (int i = 0, x = sz - 1; x < n; i++, x++) 
+                for (int j = 0; j <= k; j++) 
+                    dp[i][x][j] = (s[i] == s[x]) ? 2 + dp[i + 1][x - 1][j] : 
+                                  max({dp[i + 1][x][j], dp[i][x - 1][j], (j >= price(s[i], s[x]) ? 2 + dp[i + 1][x - 1][j - price(s[i], s[x])] : 0)});
+
+        return dp[0][n - 1][k];
+    }
+};
