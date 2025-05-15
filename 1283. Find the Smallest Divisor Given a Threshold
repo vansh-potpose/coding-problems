@@ -1,0 +1,23 @@
+class Solution {
+public:
+    long long vailidate(vector<int>& nums,int mid){
+        long long aws=0;
+        for(int i=0;i<nums.size();i++){
+            aws+=(nums[i]+mid-1)/mid;
+        }
+        return aws;
+    }
+    int smallestDivisor(vector<int>& nums, int threshold) {
+        int lo=1,hi,mid;
+        hi=*max_element(nums.begin(),nums.end());
+        while(lo<hi){
+            mid=(lo+hi)/2;
+            if(vailidate(nums,mid)<=threshold){
+                hi=mid;
+            }else{
+                lo=mid+1;
+            }
+        }
+        return hi;
+    }
+};
