@@ -1,0 +1,20 @@
+class Solution {
+public:
+    string intToRoman(int num) {
+        vector<int> keys = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+        vector<string> values = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+        int i=0;
+        string val="";
+        while(num>0 && i<14){
+            if(num>=keys[i]){
+                val+=values[i];
+                num-=keys[i];
+            }else{
+                i++;
+
+            }
+        }
+    
+    return val;
+    }
+};
