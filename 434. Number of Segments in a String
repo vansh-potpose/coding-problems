@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int countSegments(string s) {
+        int i=0,count=0;
+        while(i<s.length()){
+            if(s[i]== ' '){
+                i++;
+                while(s[i]== ' ' && i<s.length()){
+                    i++;
+                }
+            }
+            if(i>=s.length()){
+                break;
+            }
+            if(s[i]!= ' '){
+                count++;
+                i++;
+                while(s[i]!=' ' && i<s.length()){
+                    i++;
+                }
+                
+            }
+        }
+        return count;
+    }
+};
