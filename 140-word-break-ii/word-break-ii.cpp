@@ -1,31 +1,35 @@
 class Solution {
+    unordered_set<string> wordSet;
+    vector<string> res;
 public:
-    unordered_map<string, vector<string>> memo;
-    unordered_set<string> dict;
-
     vector<string> wordBreak(string s, vector<string>& wordDict) {
-        dict = unordered_set<string>(wordDict.begin(), wordDict.end());
-        return dfs(s);
+        vector<string> cur;
+        wordSet = unordered_set<string> (wordDict.begin(), wordDict.end());
+        rec(s,0,cur);
+        return res;
     }
 
-    vector<string> dfs(string s){
-        if(memo.count(s)) return memo[s];
-
-        vector<string> res;
-
-        if(dict.count(s)) res.push_back(s);
-
-        for(int i=1;i<s.size();i++){
-            string left=s.substr(0,i);
-            string right=s.substr(i);
-
-            if (dict.count(left)) {
-                vector<string> sublist = dfs(right);
-                for (string sub : sublist) {
-                    res.push_back(left + " " + sub);
-                }
+    void rec (const string &s, int index, vector<string> &cur) {
+        if (index == s.length()){
+            res.push_back(join(cur));
+            return;
+        } 
+        for (int j = index; j<s.length(); j++) {
+            string w = s.substr(index, j-index+1);
+            if (wordSet.count(w)) {
+                cur.push_back(w);
+                rec(s, j+1, cur);
+                cur.pop_back();
             }
         }
-        return memo[s]=res;
+    }
+
+    string join(const vector<string> &cur) {
+        ostringstream oss;
+        for (int i = 0; i<cur.size(); i++) {
+            if (i!=0) oss << " ";
+            oss << cur[i];
+        }
+        return oss.str();
     }
 };
