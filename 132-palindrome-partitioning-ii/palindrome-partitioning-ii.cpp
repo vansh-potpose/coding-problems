@@ -1,27 +1,21 @@
 class Solution {
 public:
-    bool isPal(string& s,int start,int end){
-        while(start<=end){
-            if(s[start++]!=s[end--])return false;
-        }
-        return true;
-    }
+    int minCut(string s) {
+        int n = s.length();
+        vector<int> dp(n, 0);
+        vector<vector<bool>> pal(n, vector<bool>(n, false));
 
-    int f(int idx,string  &s, vector<int>& dp) {
-        if (idx == s.size()) return -1; // No cut needed after the last partition
-        if (dp[idx] != -1) return dp[idx];
-
-        int minCuts = INT_MAX;
-        for (int i = idx; i < s.size(); i++) {
-            if (isPal(s, idx, i)) {
-                minCuts = min(minCuts, 1 + f(i + 1, s, dp));
+        for (int i = 0; i < n; ++i) {
+            dp[i] = i; // max cuts at worst: cut each character
+            for (int j = 0; j <= i; ++j) {
+                if (s[i] == s[j] && (i - j <= 2 || pal[j + 1][i - 1])) {
+                    pal[j][i] = true;
+                    // If s[0..i] is a palindrome, no cut needed
+                    dp[i] = (j == 0) ? 0 : min(dp[i], dp[j - 1] + 1);
+                }
             }
         }
-        return dp[idx] = minCuts;
-    }
 
-    int minCut(string s) {
-        vector<int> dp(s.size(), -1);
-        return f(0, s, dp);
+        return dp[n - 1];
     }
 };
