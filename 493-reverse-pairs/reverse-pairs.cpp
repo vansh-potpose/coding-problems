@@ -1,64 +1,83 @@
-class SegmentTree {
-    vector<int> tree;
-    int n;
-
-public:
-    SegmentTree(int size) {
-        n = size;
-        tree.resize(4 * n, 0);
-    }
-
-    void update(int node, int start, int end, int idx) {
-        if (start == end) {
-            tree[node]++;
-            return;
-        }
-        int mid = (start + end) / 2;
-        if (idx <= mid)
-            update(2 * node, start, mid, idx);
-        else
-            update(2 * node + 1, mid + 1, end, idx);
-        tree[node] = tree[2 * node] + tree[2 * node + 1];
-    }
-
-    int query(int node, int start, int end, int l, int r) {
-        if (r < start || end < l) return 0;
-        if (l <= start && end <= r) return tree[node];
-        int mid = (start + end) / 2;
-        return query(2 * node, start, mid, l, r) +
-               query(2 * node + 1, mid + 1, end, l, r);
-    }
-};
-
 class Solution {
 public:
+long long merge(vector<int>& nums,int low,int mid,int high)
+{
+    int i=low;
+    int j=mid+1;
+    int ct=0;
+    vector<int> temp;
+    for (int i = low; i <= mid; i++) {
+        while (j <= high && (long long)nums[i] > 2LL * nums[j]) {
+            j++;
+        }
+        ct += (j - (mid + 1));
+    }
+     i=low;
+     j=mid+1;
+    while(i<=mid && j<=high)
+    {
+            if(nums[j]>nums[i])
+            {
+                temp.push_back(nums[i]);
+                i++;
+            }
+            else{
+                temp.push_back(nums[j]);
+                
+                j++;
+            }
+
+    }
+    while(i<=mid)
+    {
+        temp.push_back(nums[i]);
+        i++;
+    }
+    while(j<=high)
+    {
+        temp.push_back(nums[j]);
+        j++;
+    }
+    for(int i=0;i<temp.size();i++)
+    {
+        nums[low+i]=temp[i];
+    }
+    return ct;
+    
+
+}
+long long mergeSort(vector<int>& nums,int low,int high)
+
+{
+    int ct=0;
+    if(low>=high) return ct;
+    int mid=(low+high)/2;
+    ct+=mergeSort(nums,low,mid);
+    ct+=mergeSort(nums,mid+1,high);
+    ct+=merge(nums,low,mid,high);
+    return ct;
+
+}
     int reversePairs(vector<int>& nums) {
-        vector<long> all_vals;
-        for (int num : nums) {
-            all_vals.push_back(num);
-            all_vals.push_back((long)num * 2);
-        }
-
-        // Coordinate compression
-        sort(all_vals.begin(), all_vals.end());
-        all_vals.erase(unique(all_vals.begin(), all_vals.end()), all_vals.end());
-
-        unordered_map<long, int> val_to_index;
-        for (int i = 0; i < all_vals.size(); ++i)
-            val_to_index[all_vals[i]] = i + 1;  // 1-based index
-
-        SegmentTree seg(all_vals.size() + 2);
-        int count = 0;
-
-        // Traverse from right to left
-        for (int i = nums.size() - 1; i >= 0; --i) {
-            long half = (long)nums[i];
-            int idx = lower_bound(all_vals.begin(), all_vals.end(), half) - all_vals.begin();
-            // Count elements less than nums[i]
-            count += seg.query(1, 1, all_vals.size(), 1, idx);
-            seg.update(1, 1, all_vals.size(), val_to_index[2L * nums[i]]);
-        }
-
-        return count;
+         int n=nums.size();
+        return mergeSort(nums,0,n-1);
     }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
