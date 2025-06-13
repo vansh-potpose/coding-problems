@@ -1,35 +1,68 @@
+#include <vector>
+#include <string>
+using namespace std;
+
+using ll = long long;
+
 class Solution {
 public:
-    vector<string> result;
+    vector<string> addOperators(const string &num, int target) {
+        vector<string> results;
+        if (num.empty()) return results;
 
-    void backtrack(string& num, int target, int pos, long eval, long prev, string expr) {
-        if (pos == num.size()) {
-            if (eval == target) result.push_back(expr);
+        string expr;
+        expr.reserve(num.size() * 2); // Reserve space for expression growth
+        dfs(num, target, 0, 0, 0, expr, results);
+        return results;
+    }
+
+private:
+    void dfs(const string &num,
+             int target,
+             int pos,
+             ll curValue,
+             ll lastOperand,
+             string &expr,
+             vector<string> &results) {
+        
+        int n = num.size();
+        if (pos == n) {
+            if (curValue == target) {
+                results.push_back(expr);
+            }
             return;
         }
 
-        for (int i = pos; i < num.size(); ++i) {
-            if (i != pos && num[pos] == '0') break; // prevent numbers with leading zero
+        for (int i = pos; i < n; ++i) {
+            if (i > pos && num[pos] == '0') break; // Skip leading zero numbers
 
-            string currStr = num.substr(pos, i - pos + 1);
-            long curr = stol(currStr);
+            string_view part = string_view(num).substr(pos, i - pos + 1);
+            ll value = stoll(string(part)); // Convert only once
+
+            int prevLen = expr.size();
 
             if (pos == 0) {
-                // First number, no operator
-                backtrack(num, target, i + 1, curr, curr, currStr);
+                expr += string(part);
+                dfs(num, target, i + 1, value, value, expr, results);
+                expr.resize(prevLen);
             } else {
-                backtrack(num, target, i + 1, eval + curr, curr, expr + "+" + currStr);
-                backtrack(num, target, i + 1, eval - curr, -curr, expr + "-" + currStr);
-                // For multiplication, subtract prev and add (prev * curr)
-                backtrack(num, target, i + 1, eval - prev + prev * curr, prev * curr, expr + "*" + currStr);
+                // '+'
+                expr += "+" + string(part);
+                dfs(num, target, i + 1, curValue + value, value, expr, results);
+                expr.resize(prevLen);
+
+                // '-'
+                expr += "-" + string(part);
+                dfs(num, target, i + 1, curValue - value, -value, expr, results);
+                expr.resize(prevLen);
+
+                // '*'
+                expr += "*" + string(part);
+                ll newCurValue = curValue - lastOperand + lastOperand * value;
+                ll newLastOperand = lastOperand * value;
+                dfs(num, target, i + 1, newCurValue, newLastOperand, expr, results);
+                expr.resize(prevLen);
             }
         }
-    }
-
-    vector<string> addOperators(string num, int target) {
-        result.clear();
-        if (num.empty()) return result;
-        backtrack(num, target, 0, 0, 0, "");
-        return result;
     }
 };
