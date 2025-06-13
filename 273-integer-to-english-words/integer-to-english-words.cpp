@@ -21,6 +21,8 @@ public:
     }
 
     string numberToWords(int num) {
+        ios::sync_with_stdio(false);
+        cin.tie(NULL);
         // edge case
         if (num == 0) 
             return "Zero";
