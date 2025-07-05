@@ -1,15 +1,21 @@
 class Solution {
 public:
     int findLucky(vector<int>& arr) {
-        unordered_map<int,int> mp;
         int result=-1;
-        for(int i=0;i<arr.size();i++){
-            mp[arr[i]]++;
-        }
-        for(auto m : mp){
-            if(m.second==m.first && m.first>result){
-                result=m.first;
+        
+        sort(arr.begin(),arr.end());
+
+        for(int i=1;i<arr.size();i++){
+            int count=1;
+            while(i<arr.size() && arr[i-1]==arr[i]){
+                count++;
+                i++;
             }
+            if(count==arr[i-1]){
+                result=count;
+            }
+            
+
         }
 
         return result;
