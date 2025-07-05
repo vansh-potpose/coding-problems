@@ -7,15 +7,13 @@ public:
 
         for(int i=1;i<arr.size();i++){
             int count=1;
-            while(i<arr.size() && arr[i-1]==arr[i]){
+            while(i<arr.size() && arr[i]==arr[i-1]){
                 count++;
                 i++;
             }
             if(count==arr[i-1]){
                 result=count;
             }
-            
-
         }
 
         return result;
