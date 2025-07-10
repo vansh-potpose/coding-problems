@@ -10,37 +10,37 @@
  * };
  */
 class Solution {
+TreeNode* first=NULL;
+TreeNode* middle=NULL;
+TreeNode* last=NULL;
+TreeNode* prev;
 public:
-    bool check(TreeNode* root,TreeNode* min,TreeNode* max) {
-        if(root==NULL){
-            return true;
+
+    void inorder(TreeNode* root){
+        if(root==nullptr)return;
+        inorder(root->left);
+        if(prev!=NULL &&root->val<prev->val){
+            if(first==NULL){
+            first=prev;
+            middle=root;
+            }
+            else{
+                last=root;
+            }
         }
-        if(root->val<min->val){
-            swap(root->val, min->val);
-            return false;
-        }
-        if(root->val>max->val){
-            swap(root->val, max->val);
-            return false;
-        }
-        return check(root->left,min,root) && check(root->right,root,max);
+        prev=root;
+        inorder(root->right);
     }
 
-  bool checkit(TreeNode* root,long min,long max) {
-        if(root==NULL){
-            return true;
-        }
-        if(root->val<=min || root->val>=max){
-            return false;
-        }
-        return checkit(root->left,min,root->val) && checkit(root->right,root->val,max);
-    }
     void recoverTree(TreeNode* root) {
-        TreeNode* min=new TreeNode(INT_MIN);
-        TreeNode* max=new TreeNode(INT_MAX);
-        long m1=LONG_MIN,m2=LONG_MAX;
-        while(!checkit(root,m1,m2)){
-            check(root,min,max);
+
+        TreeNode* prev=new TreeNode(INT_MIN);
+        inorder(root);
+        if(first&&last){
+            swap(first->val,last->val);
+        }
+        else{
+            swap(first->val,middle->val);
         }
         
     }
