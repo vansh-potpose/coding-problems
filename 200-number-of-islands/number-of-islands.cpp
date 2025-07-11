@@ -1,74 +1,30 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-void bfs(vector<vector<char>>& grid, vector<vector<bool>> &vis, pair<int, int>& a)
-{
-    queue<pair<int, int>> q;
-    q.push(a);
-    vis[a.first][a.second] = true;
-
-    while (!q.empty())
-    {
-        int i = q.front().first;
-        int j = q.front().second;
-        q.pop();
-
-        if (i-1 >= 0 && !vis[i-1][j] && grid[i-1][j] == '1')
-        {
-            q.push({i-1, j});
-            vis[i-1][j] = true;
-        }
-        if (i+1 < grid.size() && !vis[i+1][j] && grid[i+1][j] == '1')
-        {
-            q.push({i+1, j});
-            vis[i+1][j] = true;
-        }
-        if (j-1 >= 0 && !vis[i][j-1] && grid[i][j-1] == '1')
-        {
-            q.push({i, j-1});
-            vis[i][j-1] = true;
-        }
-        if (j+1 < grid[0].size() && !vis[i][j+1] && grid[i][j+1] == '1')
-        {
-            q.push({i, j+1});
-            vis[i][j+1] = true;
-        }
-    }
-}
-
 class Solution {
 public:
-    int numIslands(vector<vector<char>>& grid) 
-    {
-        vector<pair<int, int>> vec;
-
-        int m = grid.size();
-        int n = grid[0].size();
-
-        for (int i = 0; i < m; i++)
-        {
-            for (int j = 0; j < n; j++)
-            {
-                if (grid[i][j] == '1')
-                {
-                    vec.push_back({i,j});
+    int ans = 0;
+    int numIslands(vector<vector<char>>& grid) {
+        int rows = grid.size();
+        int cols = grid[0].size();
+        vector<vector<bool>> visited(rows, vector<bool>(cols, false));
+        for(int i = 0; i<rows; i++){
+            for(int j = 0; j<cols; j++){
+                if(grid[i][j] == '1' && !visited[i][j]){
+                    dfs(grid, visited, rows, cols, i, j);
+                    ans++;
                 }
             }
         }
+        return ans;        
+    }
 
-        vector<vector<bool>> vis(m, vector<bool> (n, false));
-
-        int count = 0;
-
-        for (int i = 0; i < vec.size(); i++)
-        {
-            if (!vis[vec[i].first][vec[i].second])
-            {
-                bfs(grid, vis, vec[i]);
-                count++;
-            }
+    void dfs(vector<vector<char>> &grid, vector<vector<bool>> &visited, int rows, int cols, int i, int j){
+        if(i < 0 || j < 0 || i >= rows || j >= cols || visited[i][j] || grid[i][j] != '1'){
+            return;
         }
 
-        return count;
+        visited[i][j] = true;
+        dfs(grid, visited, rows, cols, i + 1, j);
+        dfs(grid, visited, rows, cols, i - 1, j);
+        dfs(grid, visited, rows, cols, i, j + 1);
+        dfs(grid, visited, rows, cols, i, j - 1);
     }
 };
