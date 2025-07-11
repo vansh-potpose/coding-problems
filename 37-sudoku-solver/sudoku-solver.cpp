@@ -1,37 +1,62 @@
 class Solution {
 public:
-    unordered_map<int,int> squares;
-    bool isValid(int row,int col,char num,vector<vector<char>>& board){
-        for(int i=0;i<9;i++){
-            if(board[i][col]==num || board[row][i]==num || board[3*(row/3)+i/3][3*(col/3)+i%3]==num){
+    bool isSafe(vector<vector<char>>& board,int row,int col,char dig){
+        // horizontal
+        for(int j=0;j<9;j++){
+            if(board[row][j]==dig){
                 return false;
             }
         }
-       
-        return true;
-    }
 
-    bool sudokuSolver(vector<vector<char>>& board){
+        // vertically
         for(int i=0;i<9;i++){
-            for(int j=0;j<9;j++){
-                if(board[i][j]=='.'){
-                    for(char k='1';k<='9';k++){
-                        if(isValid(i,j,k,board)){
-                            board[i][j]=k;
-                            if(sudokuSolver(board)){
-                                return true;
-                            }else{
-                                board[i][j]='.';
-                            }
-                        }
-                    }
-                        return false;
+            if(board[i][col]==dig){
+                return false;
+            }
+        }
+
+        // grid
+        int srow = (row/3)*3;
+        int scol = (col/3)*3;
+
+        for(int i=srow;i<=srow+2;i++){
+            for(int j=scol;j<=scol+2;j++){
+                if(board[i][j]==dig){
+                    return false;
                 }
             }
         }
         return true;
     }
+
+    bool helper(vector<vector<char>>&board,int row,int col){
+        if(row==9){
+            return true;
+        }
+
+        int nextRow=row, nextCol = col+1;
+        if(nextCol==9){
+            nextRow = row+1;
+            nextCol = 0;
+        }
+        if(board[row][col] != '.'){
+            return helper(board,nextRow,nextCol);
+        }
+
+        // place the digit
+        for(char dig='1';dig<='9';dig++){
+            if(isSafe(board,row,col,dig)){
+                board[row][col]=dig;
+                if(helper(board,nextRow,nextCol)){
+                    return true;
+                }
+                board[row][col] = '.'; // backTrack
+            }
+        }
+        return false;
+    }
+
     void solveSudoku(vector<vector<char>>& board) {
-        sudokuSolver(board);
+        helper(board,0,0);
     }
 };
