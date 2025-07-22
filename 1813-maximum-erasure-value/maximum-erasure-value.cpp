@@ -1,21 +1,26 @@
 class Solution {
 public:
     int maximumUniqueSubarray(vector<int>& nums) {
-        unordered_map<int,int> mp;
-        int l=0,r=0;
-        int sum=0,max_sum=0;
-        while(l<=r && r<nums.size()){
-            if(mp[nums[r]]){
-                mp[nums[l]]--;
-                sum-=nums[l];
-                l++;
-            }else{
-                mp[nums[r]]++;
-                sum+=nums[r];
-                max_sum=max(sum,max_sum);
-                r++;
+        int n = nums.size();
+        int l=0,r=0,maxsum = 0,sum = 0;
+        vector<int> hash(10001,-1);
+
+        while(r<n)
+        {
+            if(hash[nums[r]] != -1)
+            {
+                while(l<= hash[nums[r]])
+                {
+                    sum-=nums[l];
+                    l++;
+                }
             }
+            sum+=nums[r];
+            maxsum = max(maxsum,sum);
+            hash[nums[r]] = r;
+            r++;
         }
-        return max_sum;
+
+        return maxsum;
     }
 };
