@@ -7,7 +7,7 @@ public:
         for(int i=0;i<n;i++){
             count[B1[i]]++;
             count[B2[i]]--;
-            
+
         }
         while(n--){
             B1.pop_back();
