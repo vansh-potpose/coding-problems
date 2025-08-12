@@ -1,18 +1,26 @@
 class Solution {
 public:
-    int numberOfWays(int n, int x) {
-        long long mod = 1e9 + 7;
-        vector<vector<long long>> dp(n + 1, vector<long long>(n + 1));
-        dp[0][0] = 1;
-        for (int i = 1; i <= n; i++) {
-            long long val = pow(i, x);
-            for (int j = 0; j <= n; j++) {
-                dp[i][j] = dp[i - 1][j];
-                if (j >= val) {
-                    dp[i][j] = (dp[i][j] + dp[i - 1][j - val]) % mod;
-                }
+    int numberOfWays(int n, int exponent) {
+        vector<int> dynamic(n + 1, 0);
+        dynamic[0] = 1;
+        int base = 1, power = 1;
+        while (power <= n) {
+            for (int index = n; index >= power; index--) {
+                dynamic[index] = (dynamic[index] + dynamic[index - power]) % 1000000007;
             }
+            ++base, power = fast_power(base, exponent);
         }
-        return dp[n][n];
+        return dynamic[n];
+    }
+    int fast_power(int base, int exponent) {
+        int result = 1;
+        while (exponent > 0) {
+            if (exponent & 1) {
+                result *= base;
+            }
+            base *= base;
+            exponent >>= 1;
+        }
+        return result;
     }
 };
