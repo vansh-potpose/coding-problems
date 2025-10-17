@@ -1,25 +1,39 @@
+
 class Solution {
 public:
-    int minimumTimeRequired(vector<int>& jobs, int k) {
-        const int n = jobs.size();
-        
-        vector<int> sums(1<<n);
-        for (int b = 0; b < (1<<n); ++b) {
-            for (int i = 0; i < n; ++i) {
-                if ((1<<i) & b) sums[b] += jobs[i]; 
-            }    
+    int n;
+
+    bool func(int idx, vector<int>& jobs, vector<int>& workers, int k, int limit) {
+        if (idx == n) return true;
+        int curJob = jobs[idx];
+        for (int i = 0; i < k; i++) {
+            if (workers[i] + curJob <= limit) {
+                workers[i] += curJob;
+                if (func(idx + 1, jobs, workers, k, limit)) return true;
+                workers[i] -= curJob;
+            }
+            if (workers[i] == 0) break; 
         }
-        
-        vector<vector<int>> dp(k+1, vector<int>(1<<n));
-        for (int b = 0; b < (1<<n); ++b) dp[1][b] = sums[b];
-        for (int i = 2; i <= k; ++i) {
-            for (int b = 1; b < (1<<n); ++b) {
-                dp[i][b] = dp[i-1][b];
-                for (int tb = b; tb; tb = (tb-1)&b) {
-                    dp[i][b] = min(dp[i][b], max(sums[tb], dp[i-1][b-tb]));
-                }
+        return false;
+    }
+
+    int minimumTimeRequired(vector<int>& jobs, int k) {
+        n = jobs.size();
+        sort(jobs.rbegin(), jobs.rend());
+        int low = *max_element(jobs.begin(), jobs.end());
+        int high = accumulate(jobs.begin(), jobs.end(), 0);
+        int ans = high;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            vector<int> workers(k, 0);
+            if (func(0, jobs, workers, k, mid)) {
+                ans = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
             }
         }
-        return dp[k][(1<<n)-1];
+        return ans;
     }
 };
