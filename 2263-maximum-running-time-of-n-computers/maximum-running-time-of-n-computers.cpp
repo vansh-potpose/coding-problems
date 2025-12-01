@@ -1,15 +1,23 @@
 class Solution {
 public:
-    long long maxRunTime(int n, vector<int>& arr) {
-        sort(arr.begin(), arr.end());
-        long long total = accumulate(arr.begin(), arr.end(), 0LL);
+    long long maxRunTime(int n, vector<int>& batteries) {
+         long sumPower = 0;
+        for (auto power : batteries)
+            sumPower += power;
+        long left = 1, right = sumPower / n;
+        
+        while (left < right){
+            long target = right - (right - left) / 2;
+            long extra = 0;
+            
+            for (int power : batteries)
+                extra += power<=target?power:target;
 
-        for (int i = arr.size() - 1; i >= 0; i--) {
-            if (arr[i] <= total / n) break;
-            total -= arr[i];
-            n--;
+            if (extra >= (long)(n * target))
+                left = target;
+            else
+                right = target - 1;
         }
-
-        return total / n;
+        return left;
     }
 };
