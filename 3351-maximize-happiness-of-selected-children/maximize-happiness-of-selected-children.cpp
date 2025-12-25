@@ -4,8 +4,8 @@ public:
         sort(happiness.begin(),happiness.end(),greater<int>());
         long long sum=0;
         for(int i=0;i<k;i++){
-            int temp=happiness[i]-i;
-            sum+=temp>0?temp:0;
+            if(happiness[i]-i<=0)break;
+            sum+=happiness[i]-i;
         }
         return sum;
     }
