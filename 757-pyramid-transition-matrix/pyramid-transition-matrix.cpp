@@ -1,74 +1,45 @@
-// This version has a pruning Check
-using u8=unsigned char;
-
-u8 pattern[36];
-const int N=117649; // 7^6
-bitset<N> BAD[7];   // memo per row length
-
+// https://www.youtube.com/@0x3f
 class Solution {
 public:
-    static inline unsigned encode(const string& s) {
-        unsigned ans=0;
-        for (char c : s) {
-            ans=ans*7+(c-'A');
+    bool pyramidTransition(string bottom, vector<string>& allowed) {
+        vector<int> groups[7][7];
+        for (auto& s : allowed) {
+            // A~F -> 1~6
+            groups[s[0] & 31][s[1] & 31].push_back(s[2] & 31);
         }
-        return ans;
-    }
-    static inline bool Check(const string& cur, int sz) {
-        for (int i=0; i<sz-1; i++) {
-            if (cur[i]=='G') return 0;
-            u8 key=(cur[i]-'A')*6+(cur[i+1]-'A');
-            if (!pattern[key]) return 0;
+
+        int n = bottom.size();
+        vector<int> pyramid(n);
+        for (int i = 0; i < n; i++) {
+            pyramid[n - 1] |= (bottom[i] & 31) << (i * 3); // 等价于 pyramid[n-1][i] = bottom[i]&31
         }
-        return 1;
-    }
 
-    static inline void addPattern(const vector<string>& allowed) {
-        for (const auto& s : allowed) {
-            u8 idx=(s[0]-'A')*6+(s[1]-'A');
-            pattern[idx]|=1<<(s[2]-'A');
-        }
-    }
+        vector<uint8_t> vis(1 << ((n - 1) * 3));
 
-    static bool dfs(const string& cur, string& next, int i, int sz) {
-        if (i==sz-1) {
-            if (sz==2) return 1;
-            // pruning check
-            if (!Check(next, sz-1)) return 0;
-            unsigned idx=encode(next);
-            if (BAD[sz-1][idx]) return 0;
-
-            string up(sz-1, 'G');
-            if (!dfs(next, up, 0, sz-1)) {
-                BAD[sz-1][idx]=1;
-                return 0;
+        auto dfs = [&](this auto&& dfs, int i, int j) -> bool {
+            if (i < 0) {
+                return true;
             }
-            return 1;
-        }
 
-        u8 key=(cur[i]-'A')*6+(cur[i+1]-'A');
-        unsigned mask=pattern[key];
+            if (vis[pyramid[i]]) {
+                return false;
+            }
 
-        while (mask) {
-            unsigned bit=mask & -mask;
-            mask-=bit;
+            if (j == i + 1) {
+                vis[pyramid[i]] = true;
+                return dfs(i - 1, 0);
+            }
 
-            int c=countr_zero(bit);
-            next[i]='A'+c;
+            for (int top : groups[pyramid[i + 1] >> (j * 3) & 7][pyramid[i + 1] >> ((j + 1) * 3) & 7]) {
+                pyramid[i] &= ~(7 << (j * 3)); // 清除之前填的字母，等价于 pyramid[i][j] = 0
+                pyramid[i] |= top << (j * 3); // 等价于 pyramid[i][j] = top
+                if (dfs(i, j + 1)) {
+                    return true;
+                }
+            }
+            return false;
+        };
 
-            if (dfs(cur, next, i+1, sz))
-                return 1;
-        }
-        return 0;
-    }
-
-    static bool pyramidTransition(string bottom, vector<string>& allowed) {
-        memset(pattern, 0, sizeof(pattern));
-        for (int i=1; i<=6; i++) BAD[i].reset();
-
-        addPattern(allowed);
-
-        string next(bottom.size()-1, 'G');
-        return dfs(bottom, next, 0, bottom.size());
+        return dfs(n - 2, 0);
     }
 };
