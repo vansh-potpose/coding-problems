@@ -3,50 +3,42 @@ public:
     int mostBooked(int n, vector<vector<int>>& meetings) {
         sort(meetings.begin(), meetings.end());
 
-        vector<int> count(n);
-        vector<long long> timer(n);
+        vector<long long> count(n, 0);
 
-        int itr = 0;
+        priority_queue<int, vector<int>, greater<int>> freeRooms;
+        for (int i = 0; i < n; i++) freeRooms.push(i);
 
-        while (itr < meetings.size()) {
-            int start = meetings[itr][0];
-            int end = meetings[itr][1];
-            long long dur = end - start;
+        priority_queue<
+            pair<long long,int>,
+            vector<pair<long long,int>>,
+            greater<>
+        > busyRooms;
 
-            int room = -1;
-            long long earliest = LLONG_MAX;
-            int earliestRoom = -1;
+        for (auto &m : meetings) {
+            long long start = m[0], end = m[1];
 
-            for (int i = 0; i < n; i++) {
-                if (timer[i] < earliest) {
-                    earliest = timer[i];
-                    earliestRoom = i;
-                }
-                if (timer[i] <= start) {
-                    room = i;
-                    break;
-                }
+            while (!busyRooms.empty() && busyRooms.top().first <= start) {
+                freeRooms.push(busyRooms.top().second);
+                busyRooms.pop();
             }
 
-            if (room != -1) {
-                timer[room] = end;
+            if (!freeRooms.empty()) {
+                int room = freeRooms.top();
+                freeRooms.pop();
                 count[room]++;
+                busyRooms.push({end, room});
             } else {
-                timer[earliestRoom] += dur;
-                count[earliestRoom]++;
-            }
-
-            itr++;
-        }
-
-        int max = 0, idx = 0;
-        for (int i = 0; i < n; i++) {
-            if (count[i] > max) {
-                max = count[i];
-                idx = i;
+                auto [t, room] = busyRooms.top();
+                busyRooms.pop();
+                count[room]++;
+                busyRooms.push({t + (end - start), room});
             }
         }
 
-        return idx;
+        int ans = 0;
+        for (int i = 1; i < n; i++) {
+            if (count[i] > count[ans]) ans = i;
+        }
+        return ans;
     }
 };
