@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int countCoveredBuildings(int n, vector<vector<int>>& buildings) {
+         unordered_map<int, set<int>> row, col;
+        
+        for (auto& b : buildings) {
+            int x = b[0], y = b[1];
+            row[x].insert(y);
+            col[y].insert(x);
+        }
+        
+        int count = 0;
+        
+        for (auto& b : buildings) {
+            int x = b[0], y = b[1];
+            // In the current row x, check if there is any y < current y and any y > current y
+            auto& r = row[x];
+            auto it = r.lower_bound(y);
+            
+            bool left = (it != r.begin()); // there is some y' < y
+            bool right = (next(it) != r.end()); // there is some y' > y
+            
+            auto& c = col[y];
+            auto it2 = c.lower_bound(x);
+            
+            bool up = (it2 != c.begin());
+            bool down = (next(it2) != c.end());
+            
+            if (left && right && up && down) {
+                count++;
+            }
+        }
+        
+        return count;
+    }
+};
