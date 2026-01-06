@@ -1,31 +1,36 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
 class Solution {
-    vector<int> v;
-
-    void levelSum(int lvl, TreeNode* root) {
-        if (!root) return;
-
-        if (v.size() == lvl)
-            v.push_back(root->val);
-        else
-            v[lvl] += root->val;
-
-        levelSum(lvl + 1, root->left);
-        levelSum(lvl + 1, root->right);
-    }
-
 public:
     int maxLevelSum(TreeNode* root) {
-        levelSum(0, root);
+        vector<long long> levelSum;
+        queue<TreeNode*> q;
+        long long sum = 0;
+        q.push(root);
 
-        int maxSum = v[0];
-        int level = 1;  // 1-based indexing
+        while(!q.empty()) {
+            int size =  q.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode* node = q.front();
+                q.pop();
+                sum += node->val;
 
-        for (int i = 1; i < v.size(); i++) {
-            if (v[i] > maxSum) {
-                maxSum = v[i];
-                level = i + 1;
+                if (node->left) q.push(node->left);
+                if (node->right) q.push(node->right);
             }
+            levelSum.push_back(sum);
+            sum = 0;
         }
-        return level;
+
+        return max_element(levelSum.begin(), levelSum.end()) - levelSum.begin() + 1;
     }
 };
