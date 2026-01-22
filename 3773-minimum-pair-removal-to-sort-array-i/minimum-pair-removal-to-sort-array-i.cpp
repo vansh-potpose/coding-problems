@@ -1,42 +1,31 @@
 class Solution {
 public:
-    int minimumPairRemoval(vector<int>& nums) {
-       vector<int> wexthorbin=nums;
-        int oprs=0;
-
-        while(true){
-            bool sorted=true;
-            for(int i=1;i<nums.size();i++){
-                if(nums[i-1]>nums[i]){
-                    sorted=false;
-                    break;
-                }
-            }
-            if(sorted) break;
-
-            int minSum=INT_MAX;
-            int idx=-1;
-            for(int i=0;i<nums.size()-1;i++){
-                int sum=nums[i]+nums[i+1];
-                if(sum<minSum){
-                    minSum=sum;
-                    idx=i;
-                }
-            }
-
-            vector<int> newNums;
-            for(int i=0;i<nums.size();i++){
-                if (i == idx) {
-                    newNums.push_back(nums[i] + nums[i + 1]);
-                    i++; 
-                } else {
-                    newNums.push_back(nums[i]);
-                }
-
-            }
-            nums=newNums;
-            oprs++;
+    bool isNotSorted(const vector<int>& nums) {
+        for (int i = 0; i + 1 < (int)nums.size(); i++) {
+            if (nums[i] > nums[i + 1]) return true;
         }
-        return oprs;
+        return false;
+    }
+    
+    int minimumPairRemoval(vector<int>& nums) {
+        int operations = 0;
+        while (isNotSorted(nums)) {
+            int idx = 0;
+            int minSum = nums[0] + nums[1];
+            for (int i = 1; i + 1 < (int)nums.size(); i++) {
+                int sum = nums[i] + nums[i + 1];
+                if (sum < minSum) {
+                    minSum = sum;
+                    idx = i;
+                }
+            }
+
+            nums[idx] = nums[idx] + nums[idx + 1];
+            nums.erase(nums.begin() + (idx + 1));
+            
+            operations++;
+        }
+        
+        return operations;
     }
 };
