@@ -1,13 +1,20 @@
 class Solution {
 public:
     bool checkPerfectNumber(int num) {
-        int sum=0;
-        for(int i=1;i<=num/2;i++){
-            if(num%i==0){
-                sum+=i;
-                cout<<i<<" ";
-            }
+      if(num==1)return false;
+      long long result=0;
+      long long sqrtnum=sqrt(num);
+      while(sqrtnum>1){
+        if(num%sqrtnum==0){
+            result+=sqrtnum;
+            result+=num/sqrtnum;
         }
-        return sum==num;
-    }
+        sqrtnum--;
+      }
+       result++;
+      if(result==num){
+        return true;
+      }
+      return false;
+      }
 };
