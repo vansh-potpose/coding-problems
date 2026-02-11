@@ -19,14 +19,30 @@ public:
 */
 
 class Solution {
-    vector<int> res;
 public:
     vector<int> postorder(Node* root) {
-        if(root==NULL)return {};
-        for(Node* n: root->children){
-            postorder(n);
+        if(root == nullptr) return {};
+
+        vector<int> ans;
+
+        stack<pair<Node*, bool>> st;
+        st.push({root, false});
+
+        while(!st.empty()) {
+            auto [node, visited] = st.top();
+            st.pop();
+
+            if(visited) {
+                ans.push_back(node->val);
+            } else {
+                st.push({node, true});
+                
+                for(int i=node->children.size()-1; i>=0; i--) {
+                    st.push({node->children[i], false});
+                }
+            }
         }
-        res.push_back(root->val);
-        return res;
+
+        return ans;
     }
 };
