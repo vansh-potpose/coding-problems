@@ -6,7 +6,7 @@
 <pre>
 <strong>Input:</strong> s = &quot;abcabcbb&quot;
 <strong>Output:</strong> 3
-<strong>Explanation:</strong> The answer is &quot;abc&quot;, with the length of 3.
+<strong>Explanation:</strong> The answer is &quot;abc&quot;, with the length of 3. Note that <code>&quot;bca&quot;</code> and <code>&quot;cab&quot;</code> are also correct answers.
 </pre>
 
 <p><strong class="example">Example 2:</strong></p>
@@ -30,6 +30,6 @@ Notice that the answer must be a substring, &quot;pwke&quot; is a subsequence an
 <p><strong>Constraints:</strong></p>
 
 <ul>
-	<li><code>0 &lt;= s.length &lt;= 5 * 10<sup>4</sup></code></li>
+	<li><code>0 &lt;= s.length &lt;= 10<sup>5</sup></code></li>
 	<li><code>s</code> consists of English letters, digits, symbols and spaces.</li>
 </ul>
