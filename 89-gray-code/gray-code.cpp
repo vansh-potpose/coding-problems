@@ -1,0 +1,18 @@
+class Solution {
+public:
+    void generate(int rmb,vector<int> &nums,int bit){
+        if(bit>=rmb){
+            return ;
+        }
+        int n=nums.size();
+        for(int i=n-1;i>=0;i--){
+            nums.push_back((nums[i]|(1<<bit)));
+        }
+        generate(rmb,nums,bit+1);
+    }
+    vector<int> grayCode(int n) {
+        vector<int> result={0,1};
+        generate(n,result,1);
+        return result;
+    }
+};
