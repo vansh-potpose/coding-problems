@@ -1,0 +1,45 @@
+class Solution {
+public:
+    vector<string> fullJustify(vector<string>& words, int maxWidth) {
+       vector<string> v;
+        int i = 0;
+
+        while (i < words.size()) {
+            int temp_len = 0, count = 0, j = i;
+            
+            // Collect words that fit within maxWidth
+            while (j < words.size() && temp_len + words[j].size() + count <= maxWidth) {
+                temp_len += words[j].size();
+                count++;
+                j++;
+            }
+
+            int rest_spaces = maxWidth - temp_len;
+            int gaps = count - 1;
+            string temp_string = "";
+
+            if (j == words.size() || gaps == 0) { // Last line or single-word line
+                for (int k = i; k < j; k++) {
+                    if (!temp_string.empty()) temp_string += " ";
+                    temp_string += words[k];
+                }
+                temp_string.append(maxWidth - temp_string.size(), ' '); // Left justify
+
+            }else { // Fully justified text
+                int add_space = rest_spaces / gaps;
+                int extra_space = rest_spaces % gaps;
+                
+                for (int k = i; k < j; k++) {
+                    temp_string += words[k];
+                    if (k < j - 1) { // Add spaces between words
+                        temp_string.append(add_space + (extra_space > 0 ? 1 : 0), ' ');
+                        extra_space--;
+                    }
+                }
+            } 
+            v.push_back(temp_string);
+            i = j; // Move to the next set of words
+        }
+        return v;
+    }
+};
